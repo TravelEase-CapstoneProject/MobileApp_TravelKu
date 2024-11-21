@@ -1,4 +1,4 @@
-package org.capstone_project.travelku.ui.presentation.screen.home
+package org.capstone_project.travelku.ui.presentation.screen.main.explore
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,12 +13,12 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun ExploreScreen(modifier: Modifier = Modifier) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
-                    Text("Home Screen")
+                    Text("Explore Screen")
                 }
             )
         }

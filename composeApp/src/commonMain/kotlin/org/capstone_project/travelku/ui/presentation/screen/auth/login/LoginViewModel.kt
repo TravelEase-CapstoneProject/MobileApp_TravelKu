@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.capstone_project.travelku.core.data.utils.Result
 import org.capstone_project.travelku.core.domain.usecase.AuthUseCase
+import org.capstone_project.travelku.ui.presentation.screen.auth.util.validateEmail
 import org.koin.core.component.KoinComponent
 
 class LoginViewModel(private val useCase: AuthUseCase) : ViewModel(), KoinComponent {
@@ -74,8 +75,7 @@ class LoginViewModel(private val useCase: AuthUseCase) : ViewModel(), KoinCompon
             _state.update {
                 it.copy(loading = true)
             }
-            val result = useCase.login(email, password)
-            when(result) {
+            when(val result = useCase.login(email, password)) {
                 is Result.Success -> {
                     _state.update {
                         it.copy(
@@ -88,7 +88,7 @@ class LoginViewModel(private val useCase: AuthUseCase) : ViewModel(), KoinCompon
                     _state.update {
                         it.copy(
                             loading = false,
-                            error = "Login failed!"
+                            error = result.exception.message
                         )
                     }
                 }
@@ -101,18 +101,4 @@ class LoginViewModel(private val useCase: AuthUseCase) : ViewModel(), KoinCompon
             }
         }
     }
-}
-
-private val emailAddressRegex = Regex(
-    "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
-            "\\@" +
-            "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
-            "(" +
-            "\\." +
-            "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
-            ")+"
-)
-
-private fun validateEmail(email: String): Boolean {
-    return emailAddressRegex.matches(email)
 }

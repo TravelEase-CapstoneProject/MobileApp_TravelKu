@@ -22,7 +22,7 @@ fun SplashScreen(
     modifier: Modifier = Modifier,
     navigateToOnBoarding: () -> Unit,
     navigateToLogin: () -> Unit,
-    navigateToHome: () -> Unit,
+    navigateToMain: () -> Unit,
     viewModel: SharedViewModel = koinViewModel()
 ) {
 
@@ -35,7 +35,7 @@ fun SplashScreen(
         delay(SplashTimeOut)
         if (onBoardingCompleted) {
             if (session.value?.token!!.isNotEmpty()) {
-                navigateToHome()
+                navigateToMain()
             } else {
                 navigateToLogin()
             }

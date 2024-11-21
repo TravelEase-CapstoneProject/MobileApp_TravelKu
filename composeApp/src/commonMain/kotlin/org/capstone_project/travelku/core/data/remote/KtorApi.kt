@@ -9,6 +9,7 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.headers
 import io.ktor.http.ContentType
+import io.ktor.http.URLProtocol
 import io.ktor.http.contentType
 import io.ktor.http.path
 import io.ktor.http.takeFrom
@@ -42,7 +43,8 @@ abstract class KtorApi {
 
     fun HttpRequestBuilder.endpoint(path: String) {
         url {
-            takeFrom(BASE_URL)
+            protocol = URLProtocol.HTTPS
+            host = "traveleast.up.railway.app/api"
             path(path)
             contentType(ContentType.Application.Json)
         }
@@ -50,7 +52,7 @@ abstract class KtorApi {
 
     fun HttpRequestBuilder.setToken(token: String) {
         headers {
-            append(name = "Authorization", value = "Bearer $token")
+            append(name = "X-API-TOKEN", value = token)
         }
     }
 

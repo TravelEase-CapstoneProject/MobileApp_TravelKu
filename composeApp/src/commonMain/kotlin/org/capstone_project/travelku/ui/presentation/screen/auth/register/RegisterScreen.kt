@@ -56,17 +56,12 @@ fun RegisterScreen(
 ) {
 
     var showDialog by remember { mutableStateOf(false) }
-    LaunchedEffect(key1 = state.loginSuccess) {
-        if (state.loginSuccess) {
+    LaunchedEffect(key1 = state.registerSuccess, key2 = state.registerError) {
+        if (state.registerSuccess) {
+            showDialog = true
+        } else if (state.registerError != null) {
             showDialog = true
         }
-    }
-
-    LaunchedEffect(key1 = state.loginError) {
-        if (state.loginError != null) {
-            showDialog = true
-        }
-
     }
 
     Scaffold(
@@ -89,8 +84,12 @@ fun RegisterScreen(
                 .padding(innerPadding)
         ) {
             LoginContent(
+                username = state.username,
                 email = state.email,
                 password = state.password,
+                onUsernameChanged = {
+                    onEvent(RegisterEvent.OnUsernameChanged(it))
+                },
                 onEmailChanged = {
                     onEvent(RegisterEvent.OnEmailChanged(it))
                 },
@@ -100,7 +99,15 @@ fun RegisterScreen(
                 onLoginClicked = onLoginClick,
                 emailError = state.emailError,
                 passwordError = state.passwordError,
-                onRegisterClick = onRegisterClick,
+                onRegisterClick = {
+                    onEvent(
+                        RegisterEvent.OnRegisterClicked(
+                            state.username,
+                            state.email,
+                            state.password
+                        )
+                    )
+                },
                 modifier = modifier.padding(horizontal = 16.dp)
             )
         }
@@ -139,14 +146,14 @@ fun RegisterScreen(
             },
             title = {
                 Text(
-                    text = if (state.loginSuccess) "Login Berhasil" else "Terjadi Kesalahan",
+                    text = if (state.registerSuccess) "Register Berhasil" else "Terjadi Kesalahan",
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold,
                 )
             },
             text = {
                 Text(
-                    text = if (state.loginSuccess) "Kamu berhasil login, klik OK untuk melanjutkan" else state.loginError
+                    text = if (state.registerSuccess) "Kamu berhasil mendaftar, klik OK untuk melanjutkan" else state.registerError
                         ?: "",
                     style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.Center,
@@ -156,8 +163,9 @@ fun RegisterScreen(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        if (state.loginSuccess) {
+                        if (state.registerSuccess) {
                             onEvent(RegisterEvent.ResetState)
+                            onRegisterClick()
                         } else {
                             showDialog = false
                             onEvent(RegisterEvent.ResetState)
@@ -175,8 +183,10 @@ fun RegisterScreen(
 
 @Composable
 fun LoginContent(
+    username: String,
     email: String,
     password: String,
+    onUsernameChanged: (String) -> Unit,
     onEmailChanged: (String) -> Unit,
     onPasswordChanged: (String) -> Unit,
     onLoginClicked: () -> Unit,
@@ -203,7 +213,7 @@ fun LoginContent(
                     .size(280.dp)
             )
             Text(
-                text = "Masukkan Username dan Password pada form berikut untuk mengakses fitur aplikasi",
+                text = "Daftar akun Anda sekarang",
                 style = MaterialTheme.typography.bodyMedium,
                 fontSize = 14.sp,
                 textAlign = TextAlign.Center,
@@ -214,12 +224,21 @@ fun LoginContent(
                     .padding(horizontal = 32.dp)
             )
             CustomTextField(
+                onValueChange = onUsernameChanged,
+                label = "Username",
+                isError = false,
+                modifier = Modifier
+                    .fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                supportingText = "",
+                value = username,
+            )
+            CustomTextField(
                 onValueChange = onEmailChanged,
                 label = "Email",
                 isError = emailError != null,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 8.dp),
+                    .fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 supportingText = emailError ?: "",
                 value = email,
@@ -229,7 +248,8 @@ fun LoginContent(
                 label = "Password",
                 isError = passwordError != null,
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp),
                 supportingText = passwordError ?: "",
                 value = password
             )

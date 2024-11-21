@@ -1,4 +1,4 @@
-package org.capstone_project.travelku.ui.navigation
+package org.capstone_project.travelku.ui.navigation.graph
 
 import kotlinx.serialization.Serializable
 

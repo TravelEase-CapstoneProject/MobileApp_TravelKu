@@ -16,6 +16,15 @@ sealed class Screen {
     data object Register : Screen()
 
     @Serializable
+    data object Main : Screen()
+
+    @Serializable
     data object Home : Screen()
+
+    @Serializable
+    data object Explore : Screen()
+
+    @Serializable
+    data object Profile : Screen()
 
 }

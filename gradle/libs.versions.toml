@@ -4,9 +4,9 @@ android-compileSdk = "34"
 android-minSdk = "24"
 android-targetSdk = "34"
 androidx-activityCompose = "1.9.3"
-androidx-lifecycle = "2.8.3"
+androidx-lifecycle = "2.8.4"
 annotation = "1.9.1"
-compose-multiplatform = "1.7.0"
+compose-multiplatform = "1.7.1"
 datastore = "1.1.1"
 junit = "4.13.2"
 kotlin = "2.0.21"
@@ -56,7 +56,7 @@ lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifec
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 kotlinx-atomicfu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "atomicfu" }
 kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
-
+kotlinx-time = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-time" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

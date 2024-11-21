@@ -20,5 +20,20 @@ data class UserData(
     val user_id: Int,
     val email: String,
     val username: String,
-    val token: String,
+    val token: String? = null,
 )
+
+@Serializable
+data class RegisterRequest(
+    val username: String,
+    val email: String,
+    val password: String,
+    val role: Role
+)
+
+@Serializable
+enum class Role {
+    ADMIN,
+    DRIVER,
+    USER
+}

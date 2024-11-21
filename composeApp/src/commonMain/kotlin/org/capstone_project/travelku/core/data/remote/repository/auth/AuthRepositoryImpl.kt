@@ -1,9 +1,11 @@
-package org.capstone_project.travelku.core.data.remote.repository
+package org.capstone_project.travelku.core.data.remote.repository.auth
 
 import io.ktor.client.plugins.HttpRequestTimeoutException
 import kotlinx.coroutines.withContext
 import org.capstone_project.travelku.core.data.local.preferences.UserPreferences
 import org.capstone_project.travelku.core.data.remote.response.LoginRequest
+import org.capstone_project.travelku.core.data.remote.response.RegisterRequest
+import org.capstone_project.travelku.core.data.remote.response.Role
 import org.capstone_project.travelku.core.data.utils.DispatcherProvider
 import org.capstone_project.travelku.core.data.utils.Result
 import org.capstone_project.travelku.core.domain.model.AuthResultData
@@ -28,7 +30,7 @@ class AuthRepositoryImpl(
                         user_id = authResponse.data.user_id,
                         email = authResponse.data.email,
                         username = authResponse.data.username,
-                        token = authResponse.data.token
+                        token = authResponse.data.token ?: ""
                     ))
                 }
             } catch (e: HttpRequestTimeoutException) {
@@ -39,6 +41,34 @@ class AuthRepositoryImpl(
                 }
             } catch (e: Exception) {
                 Result.Error(Exception("Login failed"))
+            }
+        }
+    }
+
+    override suspend fun register(
+        username: String,
+        email: String,
+        password: String,
+        role: Role
+    ): Result<Unit> {
+        return withContext(dispatcher.io) {
+            try {
+                val registerRequest = RegisterRequest(username, email, password, role)
+                val authResponse = authService.register(registerRequest)
+
+                if (authResponse.data == null) {
+                    Result.Error(Exception(authResponse.message))
+                } else {
+                    Result.Success(Unit)
+                }
+            } catch (e: HttpRequestTimeoutException) {
+                if (e.message == "Read timed out") {
+                    Result.Error(Exception("Connection timeout"))
+                } else {
+                    Result.Error(Exception("Register failed"))
+                }
+            } catch (e: Exception) {
+                Result.Error(Exception("Register failed"))
             }
         }
     }

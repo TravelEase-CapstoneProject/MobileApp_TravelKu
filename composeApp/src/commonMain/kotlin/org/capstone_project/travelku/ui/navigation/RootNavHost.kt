@@ -6,7 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import org.capstone_project.travelku.ui.navigation.graph.authGraph
-import org.capstone_project.travelku.ui.presentation.screen.home.HomeScreen
+import org.capstone_project.travelku.ui.presentation.screen.main.MainNav
 import org.capstone_project.travelku.ui.presentation.screen.splash.SplashScreen
 
 @Composable
@@ -17,18 +17,15 @@ fun RootNavHost(
         navController = navController,
         startDestination = Screen.Splash
     ) {
-        composable<Screen.Splash>(
-            enterTransition = { AnimationConstants.enterTransition},
-            exitTransition = { AnimationConstants.exitTransition }
-        ) {
+        composable<Screen.Splash> {
             SplashScreen(
                 navigateToOnBoarding = {
                     navController.navigate(Screen.OnBoarding) {
                         popUpTo(0) { inclusive = true }
                     }
                 },
-                navigateToHome = {
-                    navController.navigate(Screen.Home) {
+                navigateToMain = {
+                    navController.navigate(Screen.Main) {
                         popUpTo(0) { inclusive = true }
                     }
                 },
@@ -40,8 +37,8 @@ fun RootNavHost(
             )
         }
         authGraph(navController)
-        composable<Screen.Home> {
-            HomeScreen()
+        composable<Screen.Main> {
+            MainNav()
         }
     }
 }

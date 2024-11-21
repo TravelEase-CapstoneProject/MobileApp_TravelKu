@@ -24,7 +24,7 @@ class UserPreferences(private val dataStore: DataStore<Preferences>) {
             preferences[USER_ID] = user.user_id
             preferences[EMAIL] = user.email
             preferences[USERNAME] = user.username
-            preferences[TOKEN] = user.token
+            preferences[TOKEN] = user.token ?: ""
         }
     }
 
